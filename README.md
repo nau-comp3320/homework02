@@ -67,6 +67,21 @@ in the previous homework assignment.  To do this, you will be modifying the
 Lexer class in `lib/calculator/lexer.rb`.  The lexer is written using the
 [state design pattern][state].
 
+#### The grammar
+
+The following is a formal EBNF definition of all the tokens that you will need to produce:
+
+* IntegerToken -> [ `-` ] digit { digit }
+* DecimalToken -> [ `-` ] digit { digit } `.` { digit }
+* AddOpToken -> `+`
+* SubtractOpToken -> `-`
+* MultiplyOpToken -> `*`
+* DivideOpToken -> `/`
+* ExponentOpToken -> `^`
+* LeftParenthesisToken -> `(`
+* RightParenthesisToken -> `)`
+
+
 #### Implementing the state machine
 
 You start with an empty `DefaultState` class that inherits a `State` class. You
@@ -134,14 +149,20 @@ automatically.
 
 ### Generating an LL grammar
 
-In the previous homework, you generated a grammar for simple arithmetic
-expressions.  It is most likely that the grammar you generated might have
-left-recursion, which cannot be handled by a recursive descent parser.  In
-order to be able to build a parser, you will need to use the technique of
-left-factorisation to remove any left-recursion in your grammar.
+The following grammar describes the simple mathematical expression language from your last homework:
 
-You should document the LL grammar you have generated in the documentation for
-the Parser class in `lib/calculator/Parser.rb`.
+* *expression* -> { *expression* ( AddOpToken | SubtractOpToken ) } *term*
+* *term* -> { *term* ( MultiplyOpToken | DivideOpToken ) } *factor*
+* *factor* -> *base* { ExponentOpToken *factor* }
+* *base* -> IntegerToken | DecimalToken | LeftParenthesisToken *expression* RightParenthesisToken
+
+The above grammar is left-recursive (in particular, the *expression* and *term*
+rules are left-recursive).  This means it is not an LL grammar and cannot be
+parsed by an LL parser such as the recursive descent parser you will write.
+
+Use left-factorisation to convert the above into an LL grammar. You should
+document the LL grammar you have generated in the documentation for the Parser
+class in `lib/calculator/Parser.rb`.
 
 ### Creating a recursive descent parser
 
