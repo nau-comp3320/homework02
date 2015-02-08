@@ -16,6 +16,23 @@ Objectives
 [ruby]: https://www.ruby-lang.org/
 
 
+Grading
+-------
+
+This homework will primarily be graded based on the correctness of the solution
+based on the provided unit tests and any additional testing I may create.  I
+will also take into consideration the quality of the submitted code.  For
+example, is the code easy to read and understand?
+
+Additionally, 20% of the grade will be based on discussion with me as you work
+on the assignment.  At the very least, you must e-mail me at least once with a
+question or comment about the assignment.  For this to be most effective,
+please e-mail as early as possible so that I have an opportunity to help you.
+
+Remember that the work you submit must be your own.  Any academic dishonesty
+will be subject to disciplinary action.
+
+
 Procedure
 ---------
 
