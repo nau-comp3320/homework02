@@ -14,13 +14,13 @@ module Calculator
       end
     end
 
-    # Ensure that the empty string works ok
-    def DISABLED_test_empty_string
+    # Ensure that the empty string works ok DONE
+    def test_empty_string
       assert_tokenises_as ''
     end
 
-    # Ensure that all white space is eaten
-    def DISABLED_test_only_whitespace
+    # Ensure that all white space is eaten DONE
+    def test_only_whitespace
       assert_tokenises_as ' '
       assert_tokenises_as "\t"
       assert_tokenises_as "\n"
@@ -28,7 +28,7 @@ module Calculator
     end
 
     # Try out non-negative integers
-    def DISABLED_test_non_negative_integers
+    def test_non_negative_integers
       (0..1000).each do |digit|
         assert_tokenises_as digit.to_s, IntegerToken.new(digit)
       end
@@ -37,7 +37,7 @@ module Calculator
     end
 
     # Try out negative integers
-    def DISABLED_test_negative_integers
+    def test_negative_integers
       (-1000..-1).each do |digit|
         assert_tokenises_as digit.to_s, IntegerToken.new(digit)
       end
@@ -46,7 +46,7 @@ module Calculator
     end
 
     # Try out various decimals
-    def DISABLED_test_decimals
+    def test_decimals
       assert_tokenises_as '0.0', DecimalToken.new(0)
       assert_tokenises_as '1.', DecimalToken.new(1)
       assert_tokenises_as ' 3.14159', DecimalToken.new(3.14159)
@@ -54,7 +54,7 @@ module Calculator
     end
 
     # A sequence of numbers
-    def DISABLED_test_several_numbers
+    def test_several_numbers
       assert_tokenises_as '1 -2 3. -4.0',
                           IntegerToken.new(1),
                           IntegerToken.new(-2),
@@ -62,141 +62,141 @@ module Calculator
                           DecimalToken.new(-4)
     end
 
-    # Test tokenisation of the <tt>+</tt> operator
-    def DISABLED_test_add_token
+    # Test tokenisation of the <tt>+</tt> operator DONE
+    def test_add_token
       assert_tokenises_as '+', AddOpToken.instance
       assert_tokenises_as ' +', AddOpToken.instance
       assert_tokenises_as ' + ', AddOpToken.instance
     end
 
-    # Test tokenisation of the <tt>-</tt> operator
-    def DISABLED_test_subtract_token
+    # Test tokenisation of the <tt>-</tt> operator BROKEN
+    def test_subtract_token
       assert_tokenises_as '-', SubtractOpToken.instance
       assert_tokenises_as ' -', SubtractOpToken.instance
       assert_tokenises_as ' - ', SubtractOpToken.instance
     end
 
-    # Test tokenisation of the <tt>*</tt> operator
-    def DISABLED_test_multiply_token
+    # Test tokenisation of the <tt>*</tt> operator DONE
+    def test_multiply_token
       assert_tokenises_as '*', MultiplyOpToken.instance
       assert_tokenises_as ' *', MultiplyOpToken.instance
       assert_tokenises_as ' * ', MultiplyOpToken.instance
     end
 
-    # Test tokenisation of the <tt>*</tt> operator
-    def DISABLED_test_divide_token
+    # Test tokenisation of the <tt>/</tt> operator DONE
+    def test_divide_token
       assert_tokenises_as '/', DivideOpToken.instance
       assert_tokenises_as ' /', DivideOpToken.instance
       assert_tokenises_as ' / ', DivideOpToken.instance
     end
 
     # Test tokenisation of the <tt>^</tt> operator
-    def DISABLED_test_exponent_token
+    def test_exponent_token
       assert_tokenises_as '^', ExponentOpToken.instance
       assert_tokenises_as ' ^', ExponentOpToken.instance
       assert_tokenises_as ' ^ ', ExponentOpToken.instance
     end
 
     # Test tokenisation of the <tt>(</tt> operator
-    def DISABLED_test_left_parenthesis_token
+    def test_left_parenthesis_token
       assert_tokenises_as '(', LeftParenthesisToken.instance
       assert_tokenises_as ' (', LeftParenthesisToken.instance
       assert_tokenises_as ' ( ', LeftParenthesisToken.instance
     end
 
     # Test tokenisation of the <tt>(</tt> operator
-    def DISABLED_test_right_parenthesis_token
+    def test_right_parenthesis_token
       assert_tokenises_as ')', RightParenthesisToken.instance
       assert_tokenises_as ' )', RightParenthesisToken.instance
       assert_tokenises_as ' ) ', RightParenthesisToken.instance
     end
 
     # Tests an integer followed by a <tt>+</tt> operator
-    def DISABLED_test_integer_plus_sequence
+    def test_integer_plus_sequence
       assert_tokenises_as '2+2', IntegerToken.new(2), AddOpToken.instance, IntegerToken.new(2)
       assert_tokenises_as '2+-2', IntegerToken.new(2), AddOpToken.instance, IntegerToken.new(-2)
     end
 
     # Tests an integer followed by a <tt>-</tt> operator
-    def DISABLED_test_integer_minus_sequence
+    def test_integer_minus_sequence
       assert_tokenises_as '2-2', IntegerToken.new(2), SubtractOpToken.instance, IntegerToken.new(2)
       assert_tokenises_as '2--2', IntegerToken.new(2), SubtractOpToken.instance, IntegerToken.new(-2)
     end
 
     # Tests an integer followed by a <tt>*</tt> operator
-    def DISABLED_test_integer_multiply_sequence
+    def test_integer_multiply_sequence
       assert_tokenises_as '2*2', IntegerToken.new(2), MultiplyOpToken.instance, IntegerToken.new(2)
       assert_tokenises_as '2*-2', IntegerToken.new(2), MultiplyOpToken.instance, IntegerToken.new(-2)
     end
 
     # Tests an integer followed by a <tt>/</tt> operator
-    def DISABLED_test_integer_divide_sequence
+    def test_integer_divide_sequence
       assert_tokenises_as '2/2', IntegerToken.new(2), DivideOpToken.instance, IntegerToken.new(2)
       assert_tokenises_as '2/-2', IntegerToken.new(2), DivideOpToken.instance, IntegerToken.new(-2)
     end
 
     # Tests an integer followed by a <tt>^</tt> operator
-    def DISABLED_test_integer_exponent_sequence
+    def test_integer_exponent_sequence
       assert_tokenises_as '2^2', IntegerToken.new(2), ExponentOpToken.instance, IntegerToken.new(2)
       assert_tokenises_as '2^-2', IntegerToken.new(2), ExponentOpToken.instance, IntegerToken.new(-2)
     end
 
     # Tests an integer followed by a <tt>(</tt> operator
-    def DISABLED_test_integer_left_paren_sequence
+    def test_integer_left_paren_sequence
       assert_tokenises_as '2(2', IntegerToken.new(2), LeftParenthesisToken.instance, IntegerToken.new(2)
       assert_tokenises_as '-2(-2', IntegerToken.new(-2), LeftParenthesisToken.instance, IntegerToken.new(-2)
     end
 
     # Tests an integer followed by a <tt>*</tt> operator
-    def DISABLED_test_integer_right_paren_sequence
+    def test_integer_right_paren_sequence
       assert_tokenises_as '2)2', IntegerToken.new(2), RightParenthesisToken.instance, IntegerToken.new(2)
       assert_tokenises_as '-2)-2', IntegerToken.new(-2), RightParenthesisToken.instance, IntegerToken.new(-2)
     end
 
     # Tests a decimal followed by a <tt>+</tt> operator
-    def DISABLED_test_decimal_plus_sequence
+    def test_decimal_plus_sequence
       assert_tokenises_as '2.+2.0', DecimalToken.new(2), AddOpToken.instance, DecimalToken.new(2)
       assert_tokenises_as '2.0+-2.', DecimalToken.new(2), AddOpToken.instance, DecimalToken.new(-2)
     end
 
     # Tests a decimal followed by a <tt>-</tt> operator
-    def DISABLED_test_decimal_minus_sequence
+    def test_decimal_minus_sequence
       assert_tokenises_as '2.-2.0', DecimalToken.new(2), SubtractOpToken.instance, DecimalToken.new(2)
       assert_tokenises_as '2.0--2.', DecimalToken.new(2), SubtractOpToken.instance, DecimalToken.new(-2)
     end
 
     # Tests a decimal followed by a <tt>*</tt> operator
-    def DISABLED_test_decimal_multiply_sequence
+    def test_decimal_multiply_sequence
       assert_tokenises_as '2.*2.0', DecimalToken.new(2), MultiplyOpToken.instance, DecimalToken.new(2)
       assert_tokenises_as '2.0*-2.', DecimalToken.new(2), MultiplyOpToken.instance, DecimalToken.new(-2)
     end
 
     # Tests a decimal followed by a <tt>/</tt> operator
-    def DISABLED_test_decimal_divide_sequence
+    def test_decimal_divide_sequence
       assert_tokenises_as '2./2.0', DecimalToken.new(2), DivideOpToken.instance, DecimalToken.new(2)
       assert_tokenises_as '2.0/-2.', DecimalToken.new(2), DivideOpToken.instance, DecimalToken.new(-2)
     end
 
     # Tests a decimal followed by a <tt>^</tt> operator
-    def DISABLED_test_decimal_exponent_sequence
+    def test_decimal_exponent_sequence
       assert_tokenises_as '2.^2.0', DecimalToken.new(2), ExponentOpToken.instance, DecimalToken.new(2)
       assert_tokenises_as '2.0^-2.', DecimalToken.new(2), ExponentOpToken.instance, DecimalToken.new(-2)
     end
 
     # Tests a decimal followed by a <tt>(</tt> operator
-    def DISABLED_test_decimal_left_paren_sequence
+    def test_decimal_left_paren_sequence
       assert_tokenises_as '2.(2.0', DecimalToken.new(2), LeftParenthesisToken.instance, DecimalToken.new(2)
       assert_tokenises_as '-2.0(-2.', DecimalToken.new(-2), LeftParenthesisToken.instance, DecimalToken.new(-2)
     end
 
     # Tests a decimal followed by a <tt>*</tt> operator
-    def DISABLED_test_decimal_right_paren_sequence
+    def test_decimal_right_paren_sequence
       assert_tokenises_as '2.)2.0', DecimalToken.new(2), RightParenthesisToken.instance, DecimalToken.new(2)
       assert_tokenises_as '-2.0)-2.', DecimalToken.new(-2), RightParenthesisToken.instance, DecimalToken.new(-2)
     end
 
     # Tests all sequences of one operator followed by another
-    def DISABLED_test_op_op_sequences
+    def test_op_op_sequences
       ops = [AddOpToken.instance, SubtractOpToken.instance,
              MultiplyOpToken.instance, DivideOpToken.instance,
              ExponentOpToken.instance,
