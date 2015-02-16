@@ -98,6 +98,22 @@ The following is a formal EBNF definition of all the tokens that you will need t
 * LeftParenthesisToken -> `(`
 * RightParenthesisToken -> `)`
 
+The following table describes the states, outputs, and state transitions for a parser that will handle the above grammar:
+
+|Input |DefaultState |IntegerPartState | HyphenState | DecimalState
+|------|-------------|-----------------|-------------|---------------
+|whitespace |DefaultState | DefaultState / IntegerToken | DefaultState / SubtractOpToken | DefaultState / DecimalToken
+|end of input |accept |accept / IntegerToken | accept / SubtractOpToken | accept / DecimalToken
+| digit | IntegerPartState | IntegerPartState | IntegerPartState | DecimalToken
+| `.` |  | DecimalState | |
+| `-` | HyphenState | DefaultState / IntegerToken, SubtractOpToken | HyphenState / SubtractOpToken | DefaultState / DecimalToken, SubtractOpToken
+| `+` | DefaultState / AddOpToken | DefaultState / IntegerToken, AddOpToken | DefaultState / SubtractOpToken, AddOpToken | DefaultState / DecimalToken, AddOpToken
+| `*` | DefaultState / MultiplyOpToken | DefaultState / IntegerToken, MultiplyOpToken | DefaultState / SubtractOpToken, MultiplyOpToken | DefaultState / DecimalToken, MultiplyOpToken
+| `/` | DefaultState / DivideOpToken | DefaultState / IntegerToken, DivideOpToken | DefaultState / SubtractOpToken, DivideOpToken | DefaultState / DecimalToken, DivideOpToken
+| `^` | DefaultState / ExponentOpToken | DefaultState / IntegerToken, ExponentOpToken | DefaultState / SubtractOpToken, ExponentOpToken | DefaultState / DecimalToken, ExponentOpToken
+| `(` | DefaultState / LeftParenthesisToken | DefaultState / IntegerToken, LeftParenthesisToken | DefaultState / SubtractOpToken, LeftParenthesisToken | DefaultState / DecimalToken, LeftParenthesisToken
+| `)` | DefaultState / RightParenthesisToken | DefaultState / IntegerToken, RightParenthesisToken | DefaultState / SubtractOpToken, RightParenthesisToken | DefaultState / DecimalToken, RightParenthesisToken
+
 
 #### Implementing the state machine
 
@@ -130,6 +146,10 @@ class DefaultState < State
   end
 end
 ```
+
+You may find [this PDF][state-pdf] helpful in learning about state machines and the state pattern.
+
+  [state-pdf]: https://web.cs.ship.edu/~djmoon/dp/dp-notes/state-pattern.pdf
 
 #### Tokens
 
@@ -177,9 +197,14 @@ The above grammar is left-recursive (in particular, the *expression* and *term*
 rules are left-recursive).  This means it is not an LL grammar and cannot be
 parsed by an LL parser such as the recursive descent parser you will write.
 
-Use left-factorisation to convert the above into an LL grammar. You should
+~~Use left-factorisation to convert the above into an LL grammar. You should
 document the LL grammar you have generated in the documentation for the Parser
-class in `lib/calculator/Parser.rb`.
+class in `lib/calculator/parser.rb`.~~
+
+I have inadvertently committed a `parser.rb` that contains the left-factored
+grammar.  This is unfortunate as it denies you the opportunity to do it on your
+own.  I certainly suggest you try it anyway as you can be certain that you will
+be tested on it.
 
 ### Creating a recursive descent parser
 
