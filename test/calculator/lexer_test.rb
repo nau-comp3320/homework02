@@ -15,12 +15,12 @@ module Calculator
     end
 
     # Ensure that the empty string works ok
-    def DISABLED_test_empty_string
+    def test_empty_string
       assert_tokenises_as ''
     end
 
     # Ensure that all white space is eaten
-    def DISABLED_test_only_whitespace
+    def test_only_whitespace
       assert_tokenises_as ' '
       assert_tokenises_as "\t"
       assert_tokenises_as "\n"
