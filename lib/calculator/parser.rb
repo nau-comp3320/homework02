@@ -63,7 +63,61 @@ module Calculator
 
     # Entry point for the parser, parses an <em>expression</em>
     def parse_expression
+
       # TODO implement me
+      def parse_expression
+
+        ExpressionNode.new(parse_term, parse_expression_prime)
+      end
+
+      def parse_expression_prime
+            case @tokens.first
+              when AddOpToken
+                ExpressionPrimeNode.new(shift_tokens, parse_expression_prime, parse_term)
+              when SubtractOpToken
+                ExpressionPrimeNode.new(shift_tokens, parse_expression_prime, parse_term)
+
+              else
+                ExpressionPrimeNode.new
+
+            end
+        def parse_term
+            TermNode.new(parse_term_prime, parse_factor)
+
+
+
+        end
+
+        def parse_factor
+            FactorNode.new(parse_term)
+
+
+        end
+        def parse_term_prime
+                case @tokens.first
+                when MultiplyOpToken
+          TermPrimeNode.new(shift_tokens, parse_factor, parse_term_prime)
+                when DivideOpToken
+          TermPrimeNode.new(shift_tokens, parse_factor, parse_term_prime)
+        else
+          TermPrimeNode.new
+
+        end
+
+
+        def parse_base
+          case @token.first
+            when IntegerToken
+              BaseNode.new(shift_tokens)
+            when DecimalToken
+              BaseNode.new(shift_tokens)
+            else
+              raise SyntaxError.new("Integer expected")
+          end
+        end
+
+        end
+      end
     end
   end
 end
