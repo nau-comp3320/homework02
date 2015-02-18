@@ -183,10 +183,10 @@ module Calculator
         [:accept]
       end
       def do_whitespace
-        [:self]
+        [self]
       end
       def do_full_stop
-        [:self]
+        [self]
       end
       def do_plus
         [:self, AddOpToken.instance]
@@ -211,14 +211,14 @@ module Calculator
       include Singleton
 
       def do_digit
-        [:self]
+        [self]
       end
     end
     class HyphenState < State
       include Singleton
 
       def do_minus
-        [:self]
+        [self]
       end
     end
   end
