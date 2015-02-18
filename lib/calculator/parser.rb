@@ -17,12 +17,12 @@ module Calculator
   # above basic grammar as it is not an LL grammar.  The following EBNF is an
   # LL grammar for the above where <em>epsilon</em> is the empty string:
   #
-  # * <em>expression</em> → <em>term</em> <em>expression'</em>
-  # * <em>expression'</em> → <em>epsilon</em> | ( AddOpToken | SubtractOpToken ) <term> <em>expression'</em>
-  # * <em>term</em> → <em>factor</em> <em>term'</em>
-  # * <em>term'</em> → <em>epsilon</em> | ( MultiplyOpToken | DivideOpToken ) <factor> <em>term'</em>
-  # * <em>factor</em> → <em>base</em> { ExponentOpToken <em>factor</em> }
-  # * <em>base</em> → IntegerToken | DecimalToken | LeftParenthesisToken <em>expression</em> RightParenthesisToken
+  # * expression → term expression'
+  # * expression' → epsilon | ( AddOpToken | SubtractOpToken ) <term> expression'
+  # * term → factor term'
+  # * term' → epsilon | ( MultiplyOpToken | DivideOpToken ) <factor> term'
+  # * factor → base { ExponentOpToken factor }
+  # * base → IntegerToken | DecimalToken | LeftParenthesisToken <em>expression</em> RightParenthesisToken
   #
   # == Implementation
   #
@@ -62,8 +62,63 @@ module Calculator
     end
 
     # Entry point for the parser, parses an <em>expression</em>
-    def parse_expression
-      # TODO implement me
-    end
+    	def parse_expression
+		ExpressionNode.new(parse_term,parse_expression_prime)
+	end
+	
+	def parse_expression_prime	
+		case @tokens.first
+			when AddOpToken 
+				ExpressionPrimeNode.new(shift_tokens,parse_term,parse_expression_prime)				
+			when SubtractOpToken
+				ExpressionPrimeNode.new(shift_tokens,parse_term,parse_expression_prime)
+			
+			else 
+				ExpressionPrimeNode.new
+		end
+	end
+
+	def parse_term
+		TermNode.new(parse_factor,parse_term_prime)
+	end
+	
+	def parse_term_prime
+		case @tokens.first
+			when MultiplyOpToken
+				TermPrimeNode.new(shift_tokens,parse_factor,parse_term_prime)
+			when DivideOpToken
+				TermPrimeNode.new(shift_tokens,parse_factor,parse_term_prime)
+			else
+				TermPrimeNode.new
+		end
+	end	
+
+	def parse_factor
+	 	factors = [parse_base]
+  # while loop here which appends elements to factors
+		while @tokens.first.is_a? ExponentOpToken or @tokens.first.is_a? IntegerToken or @tokens.first.is_a? DecimalToken or @tokens.first.is_a? LeftParenthesisToken 
+		if @tokens.first.is_a? ExponentOpToken then 
+		factors.push(shift_tokens)
+		else
+		factors.push(parse_factor)
+		end
+		end
+		FactorNode.new(*factors)
+	end
+
+	def parse_base
+		case @tokens.first
+    			when IntegerToken
+      				BaseNode.new(shift_tokens)
+  			when DecimalToken
+				BaseNode.new(shift_tokens)
+			when LeftParenthesisToken
+				BaseNode.new(shift_tokens, parse_expression,shift_tokens)
+			else
+				raise SyntaxError.new("Integer expected")
+		end	
+	end
+
+#no touchy below here
   end
 end
