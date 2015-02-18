@@ -73,9 +73,9 @@ module Calculator
       def parse_expression_prime
             case @tokens.first
               when AddOpToken
-                ExpressionPrimeNode.new(parse_term, parse_expression_prime, shift_tokens)
+                ExpressionPrimeNode.new(shift_tokens, parse_expression_prime, parse_term)
               when SubtractOpToken
-                ExpressionPrimeNode.new(parse_term, parse_expression_prime, shift_tokens)
+                ExpressionPrimeNode.new(shift_tokens, parse_expression_prime, parse_term)
 
               else
                 ExpressionPrimeNode.new
@@ -96,9 +96,9 @@ module Calculator
         def parse_term_prime
                 case @tokens.first
                 when MultiplyOpToken
-          TermPrimeNode.new(parse_term_prime, parse_factor, shift_tokens)
+          TermPrimeNode.new(shift_tokens, parse_factor, parse_term_prime)
                 when DivideOpToken
-          TermPrimeNode.new(parse_term_prime, parse_factor, shift_tokens)
+          TermPrimeNode.new(shift_tokens, parse_factor, parse_term_prime)
         else
           TermPrimeNode.new
 
