@@ -94,10 +94,17 @@ module Calculator
 	end	
 
 	def parse_factor
-		# * factor → base { ExponentOpToken factor }
-		FactorNode.new(parse_base)
+	 	factors = [parse_base]
+  # while loop here which appends elements to factors
+		while @tokens.first.is_a? ExponentOpToken or @tokens.first.is_a? IntegerToken or @tokens.first.is_a? DecimalToken or @tokens.first.is_a? LeftParenthesisToken 
+		if @tokens.first.is_a? ExponentOpToken then 
+		factors.push(shift_tokens)
+		else
+		factors.push(parse_factor)
+		end
+		end
+		FactorNode.new(*factors)
 	end
-
 
 	def parse_base
 		case @tokens.first
@@ -106,7 +113,7 @@ module Calculator
   			when DecimalToken
 				BaseNode.new(shift_tokens)
 			when LeftParenthesisToken
-				BaseNode.new(shift_tokens,parse_expression,shift_tokens)
+				BaseNode.new(shift_tokens, parse_expression,shift_tokens)
 			else
 				raise SyntaxError.new("Integer expected")
 		end	

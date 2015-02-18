@@ -6,7 +6,7 @@ module Calculator
   # tests the functionality of Parser.
   class ParserTest < Test::Unit::TestCase
     # Tests that "1" parses
-    def DISABLED_test_single_integer
+    def test_single_integer
       assert_parses_to [IntegerToken.new(1)],
                        ExpressionNode.new(
                            TermNode.new(
@@ -18,7 +18,7 @@ module Calculator
     end
 
     # Tests that "-1.0" parses
-    def DISABLED_test_single_decimal
+    def test_single_decimal
       assert_parses_to [DecimalToken.new(-1)],
                        ExpressionNode.new(
                            TermNode.new(
@@ -30,7 +30,7 @@ module Calculator
     end
 
     # Tests that "(-1)" parses
-    def DISABLED_test_parenthetical_integer
+    def test_parenthetical_integer
       assert_parses_to [LeftParenthesisToken.instance, IntegerToken.new(-1), RightParenthesisToken.instance],
                        ExpressionNode.new(
                            TermNode.new(
@@ -50,7 +50,7 @@ module Calculator
     end
 
     # Tests that "1 + 2.0" parses
-    def DISABLED_test_addition
+    def test_addition
       assert_parses_to [IntegerToken.new(1), AddOpToken.instance, DecimalToken.new(2)],
                        ExpressionNode.new(
                            TermNode.new(
@@ -69,7 +69,7 @@ module Calculator
     end
 
     # Tests that "0.0 - 2 + 3" parses
-    def DISABLED_test_subtraction_with_addition
+    def test_subtraction_with_addition
       assert_parses_to [DecimalToken.new(0), SubtractOpToken.instance, IntegerToken.new(2), AddOpToken.instance, DecimalToken.new(3)],
                        ExpressionNode.new(
                            TermNode.new(
@@ -95,7 +95,7 @@ module Calculator
     end
 
     # Tests that "0.0 * 2 + 3 / 4" parses
-    def DISABLED_test_multiplication_addition_and_division
+    def test_multiplication_addition_and_division
       assert_parses_to [DecimalToken.new(0),
                         MultiplyOpToken.instance,
                         IntegerToken.new(2),
@@ -130,7 +130,7 @@ module Calculator
     end
 
     # Tests that "0 ^ (1 + 2) ^ 3" parses
-    def DISABLED_test_exponents_and_a_group
+    def test_exponents_and_a_group
       assert_parses_to [IntegerToken.new(0),
                         ExponentOpToken.instance,
                         LeftParenthesisToken.instance,
@@ -173,12 +173,12 @@ module Calculator
     end
 
     # Tests that "+2" does not parse
-    def DISABLED_test_plus_two
+    def test_plus_two
       assert_does_not_parse [AddOpToken.instance, IntegerToken.new(2)]
     end
 
     # Tests that "3.-" does not parse
-    def DISABLED_test_three_minus
+    def test_three_minus
       assert_does_not_parse [DecimalToken.new(3), SubtractOpToken.instance]
     end
 
