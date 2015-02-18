@@ -182,6 +182,44 @@ module Calculator
       def do_end_of_input
         [:accept]
       end
+      def do_whitespace
+        [:self]
+      end
+      def do_full_stop
+        [:self]
+      end
+      def do_plus
+        [:self, AddOpToken.instance]
+      end
+      def do_asterisk
+        [:self, MultiplyOpToken.instance]
+      end
+      def do_slash
+        [:self, DivideOpToken.instance]
+      end
+      def do_caret
+        [:self, ExponentOpToken.instance]
+      end
+      def do_left_parenthesis
+        [:self, LeftParenthesisToken.instance]
+      end
+      def do_right_parenthesis
+        [:self, RightParenthesisToken.instance]
+      end
+    end
+    class IntegerPartState < State
+      include Singleton
+
+      def do_digit
+        [:self]
+      end
+    end
+    class HyphenState < State
+      include Singleton
+
+      def do_minus
+        [:self]
+      end
     end
   end
 end
