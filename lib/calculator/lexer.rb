@@ -325,7 +325,7 @@ module Calculator
       end
 
     end
-      
+
     class DashState < State
 
       def do_whitespace
