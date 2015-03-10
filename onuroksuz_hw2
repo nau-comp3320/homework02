@@ -1,0 +1,200 @@
+ Handles a whitespace input
+      def do_whitespace
+        [:error]
+      end
+      # Handles the end of input
+      def do_end_of_input
+        [:error]
+      end
+      # Handles a digit
+      def do_digit(d)
+        [:error]
+      end
+      # Handles <tt>-</tt>
+      def do_hyphen
+        [:error]
+      end
+      # Handles <tt>.</tt>
+      def do_full_stop
+        [:error]
+      end
+      # Handles <tt>+</tt>
+      def do_plus
+        [:error]
+      end
+      # Handles <tt>*</tt>
+      def do_asterisk
+        [:error]
+      end
+      # Handles <tt>/</tt>
+      def do_slash
+        [:error]
+      end
+      # Handles <tt>^</tt>
+      def do_caret
+        [:error]
+      end
+      # Handles <tt>(</tt>
+      def do_left_parenthesis
+        [:error]
+      end
+      # Handles <tt>)</tt>
+      def do_right_parenthesis
+        [:error]
+      end
+    end
+    class DefaultState < State
+      include Singleton
+      def do_whitespace
+        [self]
+      end
+      def do_end_of_input
+        [:accept]
+      end
+      def do_plus
+        [self, AddOpToken.instance]
+      end
+      def do_hyphen
+        [DashState.new]
+      end
+      def do_slash
+        [self, DivideOpToken.instance]
+      end
+      def do_asterisk
+        [self, MultiplyOpToken.instance]
+      end
+      def do_caret
+        [self, ExponentOpToken.instance]
+      end
+      def do_left_parenthesis
+        [self, LeftParenthesisToken.instance]
+      end
+      def do_right_parenthesis
+        [self, RightParenthesisToken.instance]
+      end
+      def do_digit(d)
+        [IntegerState.new(d)]
+      end
+      class IntegerState < State
+        # start recognizing an integer with the given initial state
+        def initialize(digits)
+          @digits = digits
+        end
+        # accumulate another digit, remain in the same state
+        def do_digit(d)
+          @digits += d
+          [self]
+        end
+        # got whitespace, we’re done with the integer.  Go back to default state
+        def do_whitespace
+          [DefaultState.instance, IntegerToken.new(@digits)]
+        end
+        def do_end_of_input
+          [:accept, IntegerToken.new(@digits)]
+        end
+        def do_full_stop
+          @digits += '.'
+          [DecimalState.new(@digits)]
+        end
+        def do_plus
+          [DefaultState.instance, IntegerToken.new(@digits), AddOpToken.instance]
+        end
+        def do_hyphen
+          [DefaultState.instance, IntegerToken.new(@digits), SubtractOpToken.instance]
+        end
+        def do_slash
+          [DefaultState.instance, IntegerToken.new(@digits), DivideOpToken.instance]
+        end
+        def do_asterisk
+          [DefaultState.instance, IntegerToken.new(@digits), MultiplyOpToken.instance]
+        end
+        def do_caret
+          [DefaultState.instance, IntegerToken.new(@digits), ExponentOpToken.instance]
+        end
+        def do_left_parenthesis
+          [DefaultState.instance, IntegerToken.new(@digits), LeftParenthesisToken.instance]
+        end
+        def do_right_parenthesis
+          [DefaultState.instance, IntegerToken.new(@digits), RightParenthesisToken.instance]
+        end
+      end
+      class DashState < State
+        # start recognizing a dash
+        def initialize
+          @dash = '-'
+        end
+        def do_whitespace
+          [DefaultState.instance, SubtractOpToken.instance]
+        end
+        def do_digit(d)
+          @dash += d
+          [IntegerState.new(@dash)]
+        end
+        def do_end_of_input
+          [:accept, SubtractOpToken.instance]
+        end
+        def do_plus
+          [DefaultState.instance, SubtractOpToken.instance, AddOpToken.instance]
+        end
+        def do_hyphen
+          [DefaultState.instance, SubtractOpToken.instance, SubtractOpToken.instance]
+        end
+        def do_asterisk
+          [DefaultState.instance, SubtractOpToken.instance, MultiplyOpToken.instance]
+        end
+        def do_slash
+          [DefaultState.instance, SubtractOpToken.instance, DivideOpToken.instance]
+        end
+        def do_caret
+          [DefaultState.instance, SubtractOpToken.instance, ExponentOpToken.instance]
+        end
+        def do_left_parenthesis
+          [DefaultState.instance, SubtractOpToken.instance, LeftParenthesisToken.instance]
+        end
+        def do_right_parenthesis
+          [DefaultState.instance, SubtractOpToken.instance, RightParenthesisToken.instance]
+        end
+      end
+      class DecimalState < State
+        def initialize(digits)
+          @digits = digits
+        end
+        def do_full_stop
+          @digits += '.'
+          [self]
+        end
+        def do_whitespace
+          [DefaultState.instance, DecimalToken.new(@digits)]
+        end
+        def do_digit(d)
+          @digits += d
+          [self]
+        end
+        def do_end_of_input
+          [:accept, DecimalToken.new(@digits)]
+        end
+        def do_plus
+          [DefaultState.instance, DecimalToken.new(@digits), AddOpToken.instance]
+        end
+        def do_hyphen
+          [DefaultState.instance, DecimalToken.new(@digits), SubtractOpToken.instance]
+        end
+        def do_slash
+          [DefaultState.instance, DecimalToken.new(@digits), DivideOpToken.instance]
+        end
+        def do_asterisk
+          [DefaultState.instance, DecimalToken.new(@digits), MultiplyOpToken.instance]
+        end
+        def do_caret
+          [DefaultState.instance, DecimalToken.new(@digits), ExponentOpToken.instance]
+        end
+        def do_left_parenthesis
+          [DefaultState.instance, DecimalToken.new(@digits), LeftParenthesisToken.instance]
+        end
+        def do_right_parenthesis
+          [DefaultState.instance, DecimalToken.new(@digits), RightParenthesisToken.instance]
+        end
+      end
+    end
+  end
+end
