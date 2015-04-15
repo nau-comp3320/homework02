@@ -173,12 +173,12 @@ module Calculator
     end
 
     # Tests that "+2" does not parse
-    def DISABLED_test_plus_two
+    def test_plus_two
       assert_does_not_parse [AddOpToken.instance, IntegerToken.new(2)]
     end
 
     # Tests that "3.-" does not parse
-    def DISABLED_test_three_minus
+    def test_three_minus
       assert_does_not_parse [DecimalToken.new(3), SubtractOpToken.instance]
     end
 
