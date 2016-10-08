@@ -178,6 +178,14 @@ module Calculator
     # literals at this point.
     class DefaultState < State
       include Singleton
+
+      def do_end_of_input
+        [:accept]
+      end
+
+      def do_whitespace
+        [self]
+      end
     end
   end
 end
